@@ -1,4 +1,5 @@
 ﻿using BackendDemo.Models;
+using BackendDemo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,18 @@ namespace BackendDemo.Controllers
     public class DemoController : ControllerBase
     {
 
+        private ItemServices _itemService;
+
+        public DemoController()
+        {
+            _itemService = new ItemServices();
+        }
 
         [HttpGet("{Id?}")]
         public IActionResult GetIem(int? Id)
         {
             
-            var response = AllItems();
+            var response = _itemService.AllItems();
             if (Id is null) return Ok(response);
 
             response = response.Where(t => t.ItemId == Id).ToList();
@@ -22,41 +29,6 @@ namespace BackendDemo.Controllers
 
         }
 
-        private List<Item> AllItems()
-        {
-            var myItem = new List<Item>();
-
-            var myItem1 = new Item
-            {
-                ItemId = 001,
-                ItemName = "Ice cream",
-                MFD = DateTime.Now,
-                EXPD = DateTime.Now.AddDays(10),
-                Status = ItemStatus.InStock
-            };
-            myItem.Add(myItem1);
-
-            var myItem2 = new Item
-            {
-                ItemId = 002,
-                ItemName = "Chockalat Cake",
-                MFD = DateTime.Now,
-                EXPD = DateTime.Now.AddDays(15),
-                Status = ItemStatus.Pocesss
-            };
-            myItem.Add(myItem2);
-
-            var myItem3 = new Item
-            {
-                ItemId = 003,
-                ItemName = "Apple",
-                MFD = DateTime.Now,
-                EXPD = DateTime.Now.AddDays(20),
-                Status = ItemStatus.Sell
-            };
-            myItem.Add(myItem3);
-
-            return myItem; 
-        }
+        
     }
 }
