@@ -10,10 +10,14 @@ namespace BackendDemo.Controllers
     {
 
 
-        [HttpGet]
-        public IActionResult GetIem()
+        [HttpGet("{Id?}")]
+        public IActionResult GetIem(int? Id)
         {
+            
             var response = AllItems();
+            if (Id is null) return Ok(response);
+
+            response = response.Where(t => t.ItemId == Id).ToList();
             return Ok(response);
 
         }
